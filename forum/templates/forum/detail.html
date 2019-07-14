@@ -1,0 +1,25 @@
+<body>
+		<h1>{{ post.title }} by {{ post.user }} {% if user == post.user %}<a href="{% url 'post_delete' post.pk %}">X</a>{% endif %}</h3>
+    <h2>{{ post.content }}</h5>
+    <h3>{{ post.date }}</h6>
+    <h4>{{ post.total_votes }} Votes</h7>
+
+    {% for i in i|rjust:10 %}<br>{% endfor %}
+    
+    {% if user.is_authenticated %}
+      <form action="{% url 'comment' post.pk %}" method="post">
+          {% csrf_token %}
+          <input type="text" name="content">
+          <input type="submit" name="Comment">
+      </form>
+    {% else %}
+    <p>You need to be <a href="{% url 'login' %}?next={% url 'detail' post.pk %}">Logged in</a> to comment</p>
+    {% endif %}
+
+    {% for comment in post.comment_set.all %}
+
+    <h3>{{ forloop.counter }}.{{ comment.content }} by {% if comment.user != None %} {{ comment.user }} {% else %}Deleted User{% endif %}</h3>
+        <h5>{{ comment.date }} {{ comment.total_votes }} Votes {% if user == comment.user %} <a href="{% url 'comment_delete' comment.post.pk comment.pk %}">X</a>{% endif %}</h5>
+
+    {% endfor %}
+</body>

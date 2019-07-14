@@ -1,0 +1,14 @@
+{% if user.is_authenticated %}
+  <p>You are already logged in!</p>
+  <meta http-equiv="refresh" content="0.5; URL='{% url 'index' %}'"/>
+{% else %}
+<form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <input type="submit" value="Post">
+</form>
+
+<p>Already have an account? <a href="{% url 'login' %}">Login here</a>!</p>
+{% endif %}

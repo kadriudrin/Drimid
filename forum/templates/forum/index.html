@@ -1,0 +1,20 @@
+<body>
+    <h1><a href="{% url 'submit_post' %}">Post Motherfucker</a></h1>
+    {% if not user.is_authenticated %}
+        <h1><a href="{% url 'register' %}">Register</a></h1>
+        <h1><a href="{% url 'login' %}">Log In</a></h1>
+    {% else %}
+        <h1>{{ user.username }}</h1>
+        <h1><a href="{% url 'logout' %}">Log Out</a></h1>
+    {% endif %}
+
+    Sort by:
+    <input type="button" value="Top" onclick="window.location.href='{% url 'index' 'top' %}';">
+    <input type="button" value="New" onclick="window.location.href='{% url 'index' 'new' %}';">
+
+    {% for item in post_list %}
+    <h3><a href="{% url 'detail' item.pk %}">{{ item.title }}</a> by {% if item.user != None %} {{ item.user }} {% else %}Deleted User{% endif %} {% if user == item.user %}<a href="{% url 'post_delete' item.pk %}">X</a>{% endif %}</h3>
+        <h5>{{ item.content }}</h5>
+        <h6>{{ item.date }} {{ item.total_votes }} Votes <a href="{% url 'up_vote_post' item.pk 'index' %}">/\</a> <a href="{% url 'down_vote_post' item.pk 'index' %}">\/</a></h6>
+    {% endfor %}
+</body>
